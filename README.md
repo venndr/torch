@@ -124,8 +124,8 @@ However, that does not mean you can't roll your own.
 
 **Example**
 
-We have a `Accounts.User` model that `has_many :credentials, Accounts.Credential` and we want to support filtering users
-by `credentials.email`.
+We have an `Accounts.User` model that `has_many :credentials, Accounts.Credential` and we want to support 
+filtering and paginating users by `credentials.email`.
 
 1. Add Torch pagination to the `Accounts` domain:
 
@@ -138,6 +138,22 @@ by `credentials.email`.
     name: :users
 
 ```
+
+Other optional parameters include the following:
+
+* `:page_size` - (positive integer) defaults to 15 per page
+* `:pagination_distance` - (positive integer) defaults to 5 pages
+
+You can also configure the defaults for `:page_size` and `:pagination_distance` app-wide in your `config.exs` file:
+
+``` elixir
+config :torch,
+  otp_app: :my_app,
+  page_size: 20,
+  pagination_distance: 10
+```
+
+`
 
 **NOTE** If you want to customize the pagination functions at all for your application, do not use the default `Torch.Pagination` as described above; instead you will need to define your own `paginate_*/2` method that will return a `Scrivener.Page` object.  You can also define your own pagination system and functions as well, but that will require further customization of the generated Torch controllers as well.
 
