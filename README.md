@@ -38,7 +38,7 @@ plug(
 
 3. Configure Torch by adding the following to your `config.exs`.
 
-```
+```elixir
 config :torch,
   otp_app: :my_app_name,
   template_format: "eex" || "slime"
