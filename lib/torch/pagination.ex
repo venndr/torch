@@ -42,9 +42,9 @@ defmodule Torch.Pagination do
     * `:name` - name of the collection that needs pagination (required)
   """
   defmacro __using__(opts) do
-    name = Keyword.get(opts, :name)
     repo = Keyword.get(opts, :repo)
     model = Keyword.get(opts, :model)
+    name = Keyword.get(opts, :name)
     page_size = Keyword.get(opts, :page_size) || Application.get_env(:torch, :page_size, 15)
 
     pagination_distance =
