@@ -5,8 +5,8 @@
 
 # Torch
 
-Torch is a rapid admin generator for Phoenix apps. It creates custom templates and relies
-on the Phoenix html generator under the hood.
+Torch is a rapid admin page generator for Phoenix applications. It creates custom templates and relies
+on the Phoenix Mix HTML generator tasks under the hood.
 
 ![image](https://user-images.githubusercontent.com/7085617/36333572-70e3907e-132c-11e8-9ad2-bd5e98aadc7c.png)
 
