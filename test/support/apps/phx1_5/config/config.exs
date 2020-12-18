@@ -28,6 +28,7 @@ config :phoenix, :json_library, Jason
 
 config :torch,
   otp_app: :phx1_5,
+  ecto_repo: Phx15.Repo,
   template_format: "eex"
 
 # Import environment specific config. This must remain at the bottom

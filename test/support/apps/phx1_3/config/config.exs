@@ -22,6 +22,7 @@ config :logger, :console,
 
 config :torch,
   otp_app: :example,
+  ecto_repo: Example.Repo,
   template_format: "eex"
 
 # Import environment specific config. This must remain at the bottom
