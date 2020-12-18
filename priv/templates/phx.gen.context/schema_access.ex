@@ -1,104 +1,104 @@
-import Torch.Helpers, only: [sort: 1, paginate: 4]
-import Filtrex.Type.Config
+  import Torch.Helpers, only: [sort: 1, paginate: 4]
+  import Filtrex.Type.Config
 
-use Torch.Pagination,
-  repo: ...,
-  model: <%= inspect schema.module %>,
-  name: <%= schema.plural %>
+  use Torch.Pagination,
+    repo: <%= Application.get_env(:torch, :ecto_repo) %>,
+    model: <%= inspect schema.module %>,
+    name: :<%= schema.plural %>
 
-alias <%= inspect schema.module %>
+  alias <%= inspect schema.module %>
 
 
-@doc """
-Returns the list of <%= schema.plural %>.
+  @doc """
+  Returns the list of <%= schema.plural %>.
 
-## Examples
+  ## Examples
 
-    iex> list_<%= schema.plural %>()
-    [%<%= inspect schema.alias %>{}, ...]
+      iex> list_<%= schema.plural %>()
+      [%<%= inspect schema.alias %>{}, ...]
 
-"""
-def list_<%= schema.plural %> do
-  Repo.all(<%= inspect schema.alias %>)
-end
+  """
+  def list_<%= schema.plural %> do
+    Repo.all(<%= inspect schema.alias %>)
+  end
 
-@doc """
-Gets a single <%= schema.singular %>.
+  @doc """
+  Gets a single <%= schema.singular %>.
 
-Raises `Ecto.NoResultsError` if the <%= schema.human_singular %> does not exist.
+  Raises `Ecto.NoResultsError` if the <%= schema.human_singular %> does not exist.
 
-## Examples
+  ## Examples
 
-    iex> get_<%= schema.singular %>!(123)
+      iex> get_<%= schema.singular %>!(123)
+      %<%= inspect schema.alias %>{}
+
+      iex> get_<%= schema.singular %>!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_<%= schema.singular %>!(id), do: Repo.get!(<%= inspect schema.alias %>, id)
+
+  @doc """
+  Creates a <%= schema.singular %>.
+
+  ## Examples
+
+      iex> create_<%= schema.singular %>(%{field: value})
+      {:ok, %<%= inspect schema.alias %>{}}
+
+      iex> create_<%= schema.singular %>(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_<%= schema.singular %>(attrs \\ %{}) do
     %<%= inspect schema.alias %>{}
+    |> <%= inspect schema.alias %>.changeset(attrs)
+    |> Repo.insert()
+  end
 
-    iex> get_<%= schema.singular %>!(456)
-    ** (Ecto.NoResultsError)
+  @doc """
+  Updates a <%= schema.singular %>.
 
-"""
-def get_<%= schema.singular %>!(id), do: Repo.get!(<%= inspect schema.alias %>, id)
+  ## Examples
 
-@doc """
-Creates a <%= schema.singular %>.
+      iex> update_<%= schema.singular %>(<%= schema.singular %>, %{field: new_value})
+      {:ok, %<%= inspect schema.alias %>{}}
 
-## Examples
+      iex> update_<%= schema.singular %>(<%= schema.singular %>, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
 
-    iex> create_<%= schema.singular %>(%{field: value})
-    {:ok, %<%= inspect schema.alias %>{}}
+  """
+  def update_<%= schema.singular %>(%<%= inspect schema.alias %>{} = <%= schema.singular %>, attrs) do
+    <%= schema.singular %>
+    |> <%= inspect schema.alias %>.changeset(attrs)
+    |> Repo.update()
+  end
 
-    iex> create_<%= schema.singular %>(%{field: bad_value})
-    {:error, %Ecto.Changeset{}}
+  @doc """
+  Deletes a <%= inspect schema.alias %>.
 
-"""
-def create_<%= schema.singular %>(attrs \\ %{}) do
-  %<%= inspect schema.alias %>{}
-  |> <%= inspect schema.alias %>.changeset(attrs)
-  |> Repo.insert()
-end
+  ## Examples
 
-@doc """
-Updates a <%= schema.singular %>.
+      iex> delete_<%= schema.singular %>(<%= schema.singular %>)
+      {:ok, %<%= inspect schema.alias %>{}}
 
-## Examples
+      iex> delete_<%= schema.singular %>(<%= schema.singular %>)
+      {:error, %Ecto.Changeset{}}
 
-    iex> update_<%= schema.singular %>(<%= schema.singular %>, %{field: new_value})
-    {:ok, %<%= inspect schema.alias %>{}}
+  """
+  def delete_<%= schema.singular %>(%<%= inspect schema.alias %>{} = <%= schema.singular %>) do
+    Repo.delete(<%= schema.singular %>)
+  end
 
-    iex> update_<%= schema.singular %>(<%= schema.singular %>, %{field: bad_value})
-    {:error, %Ecto.Changeset{}}
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking <%= schema.singular %> changes.
 
-"""
-def update_<%= schema.singular %>(%<%= inspect schema.alias %>{} = <%= schema.singular %>, attrs) do
-  <%= schema.singular %>
-  |> <%= inspect schema.alias %>.changeset(attrs)
-  |> Repo.update()
-end
+  ## Examples
 
-@doc """
-Deletes a <%= inspect schema.alias %>.
+      iex> change_<%= schema.singular %>(<%= schema.singular %>)
+      %Ecto.Changeset{source: %<%= inspect schema.alias %>{}}
 
-## Examples
-
-    iex> delete_<%= schema.singular %>(<%= schema.singular %>)
-    {:ok, %<%= inspect schema.alias %>{}}
-
-    iex> delete_<%= schema.singular %>(<%= schema.singular %>)
-    {:error, %Ecto.Changeset{}}
-
-"""
-def delete_<%= schema.singular %>(%<%= inspect schema.alias %>{} = <%= schema.singular %>) do
-  Repo.delete(<%= schema.singular %>)
-end
-
-@doc """
-Returns an `%Ecto.Changeset{}` for tracking <%= schema.singular %> changes.
-
-## Examples
-
-    iex> change_<%= schema.singular %>(<%= schema.singular %>)
-    %Ecto.Changeset{source: %<%= inspect schema.alias %>{}}
-
-"""
-def change_<%= schema.singular %>(%<%= inspect schema.alias %>{} = <%= schema.singular %>, attrs \\ %{}) do
-  <%= inspect schema.alias %>.changeset(<%= schema.singular %>, attrs)
-end
+  """
+  def change_<%= schema.singular %>(%<%= inspect schema.alias %>{} = <%= schema.singular %>, attrs \\ %{}) do
+    <%= inspect schema.alias %>.changeset(<%= schema.singular %>, attrs)
+  end
