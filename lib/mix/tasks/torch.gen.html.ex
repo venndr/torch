@@ -17,7 +17,9 @@ defmodule Mix.Tasks.Torch.Gen.Html do
       Mix.raise("mix torch.gen.html can only be run inside an application directory")
     end
 
-    %{format: format} = Mix.Torch.parse_config!("torch.gen.html", args)
+    # NOTE: Ensure ecto_repo key exists in the config for this task since we will
+    # try to read it directly in a template
+    %{format: format, ecto_repo: _repo} = Mix.Torch.parse_config!("torch.gen.html", args)
 
     Mix.Torch.ensure_phoenix_is_loaded!("torch.gen.html")
 

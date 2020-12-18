@@ -6,6 +6,7 @@ defmodule Mix.Tasks.Torch.Install do
 
       config :torch,
         otp_app: :my_app,
+        ecto_repo: MyApp.Repo,
         template_format: :eex
 
   ## Example

@@ -7,6 +7,10 @@ defmodule Torch.Config do
     Application.get_env(:torch, :otp_app)
   end
 
+  def ecto_repo do
+    Application.get_env(:torch, :ecto_repo)
+  end
+
   def template_format do
     Application.get_env(:torch, :template_format)
   end

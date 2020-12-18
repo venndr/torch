@@ -41,6 +41,7 @@ plug(
 ```elixir
 config :torch,
   otp_app: :my_app_name,
+  ecto_repo: MyApp.Repo,
   template_format: "eex" || "slime"
 ```
 

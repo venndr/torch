@@ -4,10 +4,12 @@ defmodule Mix.Torch do
   alias Torch.Config
 
   def parse_config!(task, args) do
-    {opts, _, _} = OptionParser.parse(args, switches: [format: :string, app: :string])
+    {opts, _, _} =
+      OptionParser.parse(args, strict: [format: :string, app: :string, ecto_repo: :string])
 
     format = convert_format(opts[:format] || Config.template_format())
     otp_app = opts[:app] || Config.otp_app()
+    ecto_repo = opts[:ecto_repo] || Config.ecto_repo()
 
     unless otp_app do
       Mix.raise("""
@@ -19,6 +21,19 @@ defmodule Mix.Torch do
 
           # Alternatively
           mix #{task} --app my_app
+      """)
+    end
+
+    unless ecto_repo do
+      Mix.raise("""
+      You need to specify an Ecto Repo to use the Torch generators. Either
+      configure it as shown below or pass it in via the `--ecto-repo` option.
+
+          config :torch,
+            ecto_repo: MyApp.Repo
+
+          # Alternatively
+          mix #{task} --ecto-repo MyApp.Repo
       """)
     end
 
@@ -37,7 +52,7 @@ defmodule Mix.Torch do
       """)
     end
 
-    %{otp_app: otp_app, format: format}
+    %{otp_app: otp_app, format: format, ecto_repo: ecto_repo}
   end
 
   def ensure_phoenix_is_loaded!(mix_task \\ "task") do
