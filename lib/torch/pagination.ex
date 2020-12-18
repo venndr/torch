@@ -99,20 +99,48 @@ defmodule Torch.Pagination do
 
       @spec filter_config(String.t()) :: list(Filtrex.Type.Config.t())
       defp filter_config(unquote(:"#{name}")) do
-        defconfig do
-          fields = unquote(model).__schema__(:query_fields)
+        # NOTE: On older Ecto/Phx versions the `:query_fields` handler might not exist in the ecto __schema__
+        # reflection function.  Fall back to using `:fields` if it doesn't
+        fields =
+          try do
+            unquote(model).__schema__(:query_fields)
+          rescue
+            FunctionClauseError -> unquote(model).__schema__(:fields)
+          end
 
-          Enum.each(fields, fn field ->
-            type = unquote(model).__schema__(:type, field)
+        Enum.map(fields, fn field ->
+          type = unquote(model).__schema__(:type, field)
 
-            cond do
-              type in [:integer, :number] -> number(field)
-              type in [:naive_datetime, :utc_datetime, :datetime, :date] -> date(field)
-              type in [:boolean] -> boolean(field)
-              true -> text(field)
-            end
-          end)
-        end
+          cond do
+            type in [:integer, :number] ->
+              %Filtrex.Type.Config{
+                type: Filtrex.Condition.Number.type(),
+                keys: [field],
+                options: %{}
+              }
+
+            type in [:naive_datetime, :utc_datetime, :datetime, :date] ->
+              %Filtrex.Type.Config{
+                type: Filtrex.Condition.Date.type(),
+                keys: [field],
+                options: %{}
+              }
+
+            type in [:boolean] ->
+              %Filtrex.Type.Config{
+                type: Filtrex.Condition.Boolean.type(),
+                keys: [field],
+                options: %{}
+              }
+
+            true ->
+              %Filtrex.Type.Config{
+                type: Filtrex.Condition.Text.type(),
+                keys: [field],
+                options: %{}
+              }
+          end
+        end)
       end
     end
   end
