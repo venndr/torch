@@ -20,6 +20,8 @@ defmodule Torch.MixCase do
                      shown below or pass it via the `--format` option.
 
                          config :torch,
+                           ecto_repo: MyApp.Repo,
+                           otp_app: :my_app,
                            template_format: :slime
 
                          # Alternatively
@@ -28,13 +30,25 @@ defmodule Torch.MixCase do
                      Supported formats: eex, slime
                      """,
                      fn ->
-                       Mix.Task.rerun(unquote(task), ["--app", "my_app"])
+                       Mix.Task.rerun(unquote(task), [
+                         "--app",
+                         "my_app",
+                         "--ecto-repo",
+                         "MyApp.Repo"
+                       ])
                      end
       end
 
       test "raises error if format is invalid" do
         assert_raise Mix.Error, fn ->
-          Mix.Task.rerun(unquote(task), ["--app", "my_app", "--format", "invalid"])
+          Mix.Task.rerun(unquote(task), [
+            "--app",
+            "my_app",
+            "--format",
+            "invalid",
+            "--ecto-repo",
+            "MyApp.Repo"
+          ])
         end
       end
 
@@ -45,13 +59,37 @@ defmodule Torch.MixCase do
                      configure it as shown below or pass it in via the `--app` option.
 
                          config :torch,
+                           ecto_repo: MyApp.Repo,
                            otp_app: :my_app
 
                          # Alternatively
                          mix #{unquote(task)} --app my_app
                      """,
                      fn ->
-                       Mix.Task.rerun(unquote(task), ["--format", "eex"])
+                       Mix.Task.rerun(unquote(task), [
+                         "--format",
+                         "eex",
+                         "--ecto-repo",
+                         "MyApp.Repo"
+                       ])
+                     end
+      end
+
+      test "raises error if :ecto_repo not specified" do
+        assert_raise Mix.Error,
+                     """
+                     You need to specify an Ecto Repo to use the Torch generators. Either
+                     configure it as shown below or pass it in via the `--ecto-repo` option.
+
+                         config :torch,
+                           ecto_repo: MyApp.Repo,
+                           otp_app: :my_app
+
+                         # Alternatively
+                         mix #{unquote(task)} --ecto-repo MyApp.Repo
+                     """,
+                     fn ->
+                       Mix.Task.rerun(unquote(task), ["--format", "eex", "--app", "my_app"])
                      end
       end
     end

@@ -17,6 +17,7 @@ defmodule Mix.Torch do
       configure it as shown below or pass it in via the `--app` option.
 
           config :torch,
+            ecto_repo: MyApp.Repo,
             otp_app: :my_app
 
           # Alternatively
@@ -30,7 +31,8 @@ defmodule Mix.Torch do
       configure it as shown below or pass it in via the `--ecto-repo` option.
 
           config :torch,
-            ecto_repo: MyApp.Repo
+            ecto_repo: MyApp.Repo,
+            otp_app: :my_app
 
           # Alternatively
           mix #{task} --ecto-repo MyApp.Repo
@@ -43,6 +45,8 @@ defmodule Mix.Torch do
       shown below or pass it via the `--format` option.
 
           config :torch,
+            ecto_repo: MyApp.Repo,
+            otp_app: :my_app,
             template_format: :slime
 
           # Alternatively
